@@ -1,12 +1,24 @@
 const express = require('express');
 const app = express();
 const fs = require('fs');
+const morgan = require('morgan');
+app.use(morgan('dev'));
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log('HEllo from middle');
+  next();
+});
+app.use((req, res, next) => {
+  req.requestTime = new Date().toLocaleString();
+  next();
+});
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 const getTours = (req, res) => {
+  const ret = req.requestTime;
   res.status(200).json({
+    requestTime: ret,
     status: 'success',
     results: tours.length,
     data: tours
