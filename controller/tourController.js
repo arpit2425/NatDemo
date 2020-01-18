@@ -10,6 +10,15 @@ exports.checkID = (req, res, next, val) => {
   }
   next();
 };
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: 'Fail',
+      message: 'Missing Name or Price'
+    });
+  }
+  next();
+};
 exports.getTours = (req, res) => {
   const ret = req.requestTime;
   res.status(200).json({
