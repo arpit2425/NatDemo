@@ -4,6 +4,11 @@ const app = require('./app');
 const mongoose = require('mongoose');
 const Tour = require('./model/tourModel');
 const db = process.env.MongoDb.replace('<PASSWORD>', process.env.password);
+process.on('uncaughtException', err => {
+  console.log(err.name, err.message);
+  process.exit(1);
+});
+
 mongoose
   .connect(db, {
     useNewUrlParser: true,
@@ -13,6 +18,12 @@ mongoose
   })
   .then(() => console.log('Database Connection successfull'));
 
-app.listen(3000, () => {
+const server = app.listen(3000, () => {
   console.log('Server at port 3000');
+});
+process.on('unhandledRejection', err => {
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
 });
