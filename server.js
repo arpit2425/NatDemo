@@ -3,6 +3,7 @@ dotenv.config({ path: './config.env' });
 const app = require('./app');
 const mongoose = require('mongoose');
 const Tour = require('./model/tourModel');
+const User = require('./model/userModel');
 const db = process.env.MongoDb.replace('<PASSWORD>', process.env.password);
 process.on('uncaughtException', err => {
   console.log(err.name, err.message);
