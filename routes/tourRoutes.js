@@ -10,15 +10,15 @@ tourRoute
 
 tourRoute
   .route('/')
-  .get(tourController.getTours)
+  .get(authController.protect, tourController.getTours)
 
-  .post(tourController.newTour);
+  .post(authController.protect, tourController.newTour);
 
 tourRoute
   .route('/:id')
   .get(
     authController.protect,
-    authController.restrictTo('admin'),
+
     tourController.getTour
   )
   .patch(

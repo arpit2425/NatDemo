@@ -7,6 +7,15 @@ userRoute.route('/login').post(authController.login);
 userRoute.route('/forgotPassword').post(authController.forgotPassword);
 userRoute.route('/resetPassword/:token').patch(authController.resetPassword);
 userRoute
+  .route('/updatePassword')
+  .patch(authController.protect, authController.updatePassword);
+userRoute
+  .route('/updateMe')
+  .patch(authController.protect, userController.updateMe);
+userRoute
+  .route('/deleteMe')
+  .delete(authController.protect, userController.deleteMe);
+userRoute
   .route('/')
   .get(authController.protect, userController.getAllUsers)
   .post(userController.createUser);
