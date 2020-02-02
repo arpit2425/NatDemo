@@ -2,39 +2,32 @@ const express = require('express');
 const userRoute = express.Router();
 const userController = require('./../controller/userController');
 const authController = require('./../controller/authController');
-userRoute.route('/signup').post(authController.signup);
-userRoute.route('/login').post(authController.login);
-userRoute.route('/forgotPassword').post(authController.forgotPassword);
-userRoute.route('/resetPassword/:token').patch(authController.resetPassword);
-userRoute
-  .route('/updatePassword')
-  .patch(authController.protect, authController.updatePassword);
-userRoute
-  .route('/updateMe')
-  .patch(authController.protect, userController.updateMe);
-userRoute
-  .route('/deleteMe')
-  .delete(authController.protect, userController.deleteMe);
-userRoute
-  .route('/')
-  .get(authController.protect, userController.getAllUsers)
-  .post(userController.createUser);
-userRoute
-  .route('/:id')
-  .get(
-    authController.protect,
-    authController.restrictTo('admin'),
-    userController.getUser
-  )
-  .put(
-    authController.protect,
-    authController.restrictTo('admin'),
-    userController.updateUser
-  )
-  .delete(
-    authController.protect,
-    authController.restrictTo('admin'),
-    userController.deleteUser
-  );
+const router = express.Router();
 
-module.exports = userRoute;
+router.post('/signup', authController.signup);
+router.post('/login', authController.login);
+router.post('/forgotPassword', authController.forgotPassword);
+router.patch('/resetPassword/:token', authController.resetPassword);
+
+// Protect all routes after this middleware
+router.use(authController.protect);
+
+router.patch('/updateMyPassword', authController.updatePassword);
+router.get('/me', userController.getMe, userController.getUser);
+router.patch('/updateMe', userController.updateMe);
+router.delete('/deleteMe', userController.deleteMe);
+
+router.use(authController.restrictTo('admin'));
+
+router
+  .route('/')
+  .get(userController.getAllUsers)
+  .post(userController.createUser);
+
+router
+  .route('/:id')
+  .get(userController.getUser)
+  .patch(userController.updateUser)
+  .delete(userController.deleteUser);
+
+module.exports = router;
