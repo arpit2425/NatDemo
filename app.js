@@ -10,6 +10,7 @@ const globalErrorHandler = require('./controller/errorController');
 const appError = require('./utils/appError');
 const tourRoute = require('./routes/tourRoutes');
 const userRoute = require('./routes/userRoutes');
+const reviewRoute = require('./routes/reviewRoutes');
 app.use(helmet());
 app.use(mongoSanitize());
 app.use(xss());
@@ -47,6 +48,7 @@ app.use((req, res, next) => {
 
 app.use('/api/v1/tours', tourRoute);
 app.use('/api/v1/users', userRoute);
+app.use('/api/v1/review', reviewRoute);
 app.all('*', (req, res, next) => {
   next(new appError(`No route with ${req.originalUrl} found in server`, 404));
 });
