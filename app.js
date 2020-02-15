@@ -11,6 +11,7 @@ const globalErrorHandler = require('./controller/errorController');
 const appError = require('./utils/appError');
 const tourRoute = require('./routes/tourRoutes');
 const userRoute = require('./routes/userRoutes');
+const cookieparser = require('cookie-parser');
 const reviewRoute = require('./routes/reviewRoutes');
 const viewRoute = require('./routes/viewRoutes');
 app.set('view engine', 'pug');
@@ -42,6 +43,7 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieparser());
 
 app.use((req, res, next) => {
   next();
